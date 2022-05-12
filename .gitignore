@@ -1,2 +1,6 @@
 *.terraform
 *.hcl
+awscli-bundle.z
+awscli-bundle/
+myvpc.plan
+awscli-bundle.zip
