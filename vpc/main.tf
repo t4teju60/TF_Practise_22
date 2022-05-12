@@ -13,6 +13,9 @@ resource "aws_subnet" "subnets" {
     count = 6
     cidr_block = var.cidr_ranges[count.index]
     availability_zone = var.availaibility_zones[count.index]
+    depends_on = [
+        aws_vpc.my_vpc
+    ]
     tags = {
         Name = "web-${count.index}"
         Name_alternate = var.subnets[count.index]
