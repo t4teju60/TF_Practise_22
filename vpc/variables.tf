@@ -1,8 +1,8 @@
-variable "subnets" {
-    type = list(string)
-    default = ["App1", "App2", "App3", "App4","App5","App6"]
-    description = "Name of subnets"
-}
+# variable "subnets" {
+#     type = list(string)
+#     default = ["App1", "App2", "App3", "App4","App5","App6"]
+#     description = "Name of subnets"
+# }
 
 variable "cidr_ranges" {
     type = list(string)

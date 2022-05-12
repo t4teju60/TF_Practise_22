@@ -19,8 +19,9 @@ resource "aws_subnet" "subnets" {
         aws_vpc.my_vpc
     ]
     tags = {
-        Name = "web-${count.index}"
-        Name_alternate = var.subnets[count.index]
+        # Name = "web-${count.index}"
+        Name = local.subnets[count.index]
+        # Name_alternate = var.subnets[count.index]
     }
 }
 
