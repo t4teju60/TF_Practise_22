@@ -11,7 +11,8 @@ resource "aws_vpc" "my_vpc" {
 resource "aws_subnet" "subnets" {
     vpc_id = aws_vpc.my_vpc.id
     count = 6
-    cidr_block = var.cidr_ranges[count.index]
+    # cidr_block = var.cidr_ranges[count.index]
+    cidr_block = cidrsubnet(var.vpc_cidr,8,count.index)
     availability_zone = var.availaibility_zones[count.index]
     depends_on = [
         aws_vpc.my_vpc
