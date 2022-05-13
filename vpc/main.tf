@@ -45,7 +45,7 @@ resource "aws_internet_gateway" "myvpc_ig" {
     
 }
 
-##<----Creating route table------>###
+##<----Creating public route table------>###
 
 resource "aws_route_table" "pub_rt" {
     vpc_id = aws_vpc.my_vpc.id
@@ -53,14 +53,14 @@ resource "aws_route_table" "pub_rt" {
         cidr_block = local.anywhere
         gateway_id = aws_internet_gateway.myvpc_ig.id
     }
-    depends_on = [aws_vpc.my_vpc,aws_subnet.subnets[0],aws_subnet.subnets[1]]
+    depends_on = [aws_vpc.my_vpc,aws_subnet.subnets[0],aws_subnet.subnets[1],aws_internet_gateway.myvpc_ig]
 
     tags = {
         Name = "Public_subnet_rt"
     }
 }
 
-##<----Associate route tables with web/public subnets------>###
+##<----Associate public route table with web/public subnets------>###
 
 resource "aws_route_table_association" "webrt_association" {
     count = 2
@@ -69,4 +69,33 @@ resource "aws_route_table_association" "webrt_association" {
     route_table_id = aws_route_table.pub_rt.id
 
     depends_on = [aws_route_table.pub_rt]
+}
+
+#### Let's create a private route table and associate with app1,app2,db1 and db2
+
+resource "aws_nat_gateway" "myvpc_ngw" {
+    subnet_id = aws_subnet.subnets[0].id
+    connectivity_type = "private"
+    tags = {
+        Name = "myvpc_ngw"
+    }
+
+}
+
+resource "aws_route_table" "private_rt" {
+    vpc_id = aws_vpc.my_vpc.id
+    route {
+        cidr_block = local.anywhere
+        gateway_id = aws_nat_gateway.myvpc_ngw.id
+    }
+    depends_on = [aws_vpc.my_vpc,aws_subnet.subnets[2],aws_subnet.subnets[3],aws_nat_gateway.myvpc_ngw]
+    tags = {
+        Name = "Private_subnet_rt"
+    }    
+}
+
+resource "aws_route_table_association" "apprt_association" {
+    count = 4
+    subnet_id = aws_subnet.subnets[count.index + 2].id
+    route_table_id = aws_route_table.private_rt.id
 }
