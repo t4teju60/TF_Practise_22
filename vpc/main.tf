@@ -35,4 +35,12 @@ resource "aws_subnet" "subnets" {
 #     }
 # }
 
-
+##<----Creating internet gateway------>###
+resource "aws_internet_gateway" "myvpc_ig" {
+    vpc_id = aws_vpc.my_vpc.id
+    tags = {
+        Name = local.igw_myvpc_igw
+    }
+    depends_on = [aws_vpc.my_vpc]
+    
+}
