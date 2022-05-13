@@ -1,7 +1,5 @@
 provider "aws" {
     region = var.region
-    # access_key = "AKIARDIRSBQ455NRSHW3"
-    # secret_key = "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"
     shared_credentials_files = ["/Users/tejesh.karri/.aws/credentails"]
 }
 
