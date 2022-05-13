@@ -1,6 +1,7 @@
 locals {
-    subnets = ["App1", "App2", "App3", "App4","App5","App6"]
+    subnets = [ "web1", "web2", "App1", "App2", "db1", "db2"]
     igw_myvpc_igw = "myvpc_igw"
+    anywhere = "0.0.0.0/0"
 }
 
 

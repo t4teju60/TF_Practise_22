@@ -44,3 +44,29 @@ resource "aws_internet_gateway" "myvpc_ig" {
     depends_on = [aws_vpc.my_vpc]
     
 }
+
+##<----Creating route table------>###
+
+resource "aws_route_table" "pub_rt" {
+    vpc_id = aws_vpc.my_vpc.id
+    route {
+        cidr_block = local.anywhere
+        gateway_id = aws_internet_gateway.myvpc_ig.id
+    }
+    depends_on = [aws_vpc.my_vpc,aws_subnet.subnets[0],aws_subnet.subnets[1]]
+
+    tags = {
+        Name = "Public_subnet_rt"
+    }
+}
+
+##<----Associate route tables with web/public subnets------>###
+
+resource "aws_route_table_association" "webrt_association" {
+    count = 2
+    #subnet_id      = aws_subnet.subnets[0].id
+    subnet_id      = aws_subnet.subnets[count.index].id
+    route_table_id = aws_route_table.pub_rt.id
+
+    depends_on = [aws_route_table.pub_rt]
+}
